@@ -60,5 +60,5 @@ fi
 # Dotfiles Setup
 if [ -f "$DOTFILES/setup/macos.sh" ]; then
   echo "Setuping macOS:"
-  DOTFILES/setup/macos.sh
+  $DOTFILES/setup/macos.sh
 fi
