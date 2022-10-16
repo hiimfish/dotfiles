@@ -32,10 +32,9 @@ if softwareupdate -l 2>&1 | grep $Q "No new software available."; then
 else
   echo "Installing software updates:"
   softwareupdate --install --all
-  echo 'OK'
 fi
 
-# Setup dotfiles
+# Setup dotfiles project
 if [ -n "$GITHUB_USER" ]; then
   DOTFILES_URL="https://github.com/$GITHUB_USER/dotfiles"
 
@@ -52,8 +51,14 @@ if [ -n "$GITHUB_USER" ]; then
   fi
 fi
 
-# Install Brewfile
-if [ -f "$DOTFILES/Brewfile" ]; then
+# Dotfiles Install
+if [ -f "$DOTFILES/install/Brewfile" ]; then
   echo "Installing Brewfile:"
-  brew bundle check --file $DOTFILES/Brewfile || brew bundle --file $DOTFILES/Brewfile
+  brew bundle check --file $DOTFILES/install/Brewfile || brew bundle --file $DOTFILES/install/Brewfile
+fi
+
+# Dotfiles Setup
+if [ -f "$DOTFILES/setup/macos.sh" ]; then
+  echo "Setuping macOS:"
+  DOTFILES/setup/macos.sh
 fi
