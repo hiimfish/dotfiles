@@ -40,20 +40,20 @@ if [ -n "$GITHUB_USER" ]; then
   DOTFILES_URL="https://github.com/$GITHUB_USER/dotfiles"
 
   if git ls-remote "$DOTFILES_URL" &>/dev/null; then
-    echo  "Fetching $GITHUB_USER/dotfiles from GitHub"
+    echo  "Fetching $GITHUB_USER/dotfiles from GitHub:"
     if [ ! -d "$DOTFILES" ]; then
-      echo "Cloning to $DOTFILES"
+      echo "Cloning to $DOTFILES."
       git clone $Q "$DOTFILES_URL" $DOTFILES
     else
-      echo "Pulling to $DOTFILES"
+      echo "Pulling to $DOTFILES."
       cd $DOTFILES
       git pull $Q --rebase --autostash
     fi    
   fi
 fi
 
-# Install from local Brewfile
-if [ -f "$HOME/.Brewfile" ]; then
-  echo "Installing from user Brewfile on GitHub:"
+# Install Brewfile
+if [ -f "$DOTFILES/Brewfile" ]; then
+  echo "Installing Brewfile:"
   brew bundle check --file $DOTFILES/Brewfile || brew bundle --file $DOTFILES/Brewfile
 fi
