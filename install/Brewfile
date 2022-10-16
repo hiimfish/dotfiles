@@ -4,7 +4,63 @@ tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "buo/cask-upgrade"
 
-brew "mas"
+brew "mas" # Mac App Store command-line interface
+brew "gh" # GitHub command-line tool
+brew "coreutils" # Those that come with macOS are outdated
+brew "ack" # Search tool like grep, but optimized for programmers
+brew "gnupg" # GNU Pretty Good Privacy (PGP) package
+brew "bat" # Clone of cat(1) with syntax highlighting and Git integration
+brew "jq" # Lightweight and flexible command-line JSON processor
+brew "zsh-autosuggestions" # Fish-like fast/unobtrusive autosuggestions for zsh
+
+# Development
 brew "python"
-# GNU Pretty Good Privacy (PGP) package
-brew "gnupg"
+
+brew "php"
+brew "composer"
+
+brew "imagemagick"
+brew "meilisearch"
+brew "mysql"
+brew "nginx"
+brew "node"
+brew "redis"
+
+# Apps
+cask "1password" # Password manager that keeps all passwords secure behind one password
+cask "1password-cli" # Command-line helper for the 1Password password manager
+cask "appcleaner" # Application uninstaller
+cask "brave-browser" # Web browser focusing on privacy
+cask "sizeup" # Utility to resize and position application windows
+cask "soundsource" # Sound and audio controller
+cask "steam" # Video game digital distribution service
+cask "transmission" # Open-source BitTorrent client
+cask "visual-studio-code" # Open-source code editor
+
+cask "google-chrome"
+cask "tinkerwell"
+cask "discord"
+cask "docker"
+cask "telegram-desktop"
+cask "the-unarchiver"
+cask "tuple"
+
+# Fonts
+cask 'font-lato'
+cask 'font-open-sans'
+cask 'font-roboto'
+cask 'font-source-code-pro-for-powerline'
+cask 'font-source-code-pro'
+cask 'font-source-sans-pro'
+cask 'font-source-serif-pro'
+
+# Mac App Store
+mas "1Blocker", id: 1365531024
+mas "Giphy Capture", id: 668208984
+mas "LINE", id: 539883307
+mas "BetterSnapTool", id: 417375580
+mas "Bear", id: 1091189122
+mas "Microsoft Word", id: 462054704
+mas "Microsoft PowerPoint", id: 462062816
+mas "Microsoft Excel", id: 462058435
+mas "GoodNotes 5", id: 1444383602
