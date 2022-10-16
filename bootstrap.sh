@@ -58,7 +58,8 @@ if [ -f "$DOTFILES/install/Brewfile" ]; then
 fi
 
 # Dotfiles Setup
-if [ -f "$DOTFILES/setup/macos.sh" ]; then
+export ZSH=$HOME/.dotfiles
+if [ -f "$ZSH/setup/macos.sh" ]; then
   echo "Setuping macOS:"
-  $DOTFILES/setup/macos.sh
+  $ZSH/setup/macos.sh
 fi
