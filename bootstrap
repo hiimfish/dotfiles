@@ -1,11 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 GITHUB_USER='hiimfish'
 DOTFILES=$HOME/.dotfiles
 Q="-q"
-
-# Prevent sleeping during script execution, as long as the machine is on AC power
-caffeinate -s -w $$ &
 
 echo "Setting up your Mac..."
 

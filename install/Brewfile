@@ -6,3 +6,5 @@ tap "buo/cask-upgrade"
 
 brew "mas"
 brew "python"
+# GNU Pretty Good Privacy (PGP) package
+brew "gnupg"
