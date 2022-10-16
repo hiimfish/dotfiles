@@ -1,6 +1,7 @@
 #!/bin/bash
 
 GITHUB_USER='hiimfish'
+DOTFILES=$HOME/.dotfiles
 Q="-q"
 
 # Prevent sleeping during script execution, as long as the machine is on AC power
@@ -9,7 +10,7 @@ caffeinate -s -w $$ &
 echo "Setting up your Mac..."
 
 # Check for Oh My Zsh and install if we don't have it
-if [ ! -d "$ZSH" ]; then
+if test ! -d "$ZSH"; then
   /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)"
 fi
 
@@ -24,18 +25,35 @@ if test ! -x "$(which brew)"; then
   fi
 fi
 
+# Check and install any remaining software updates.
+echo "Checking for software updates:"
+if softwareupdate -l 2>&1 | grep $Q "No new software available."; then
+  echo 'OK'
+else
+  echo "Installing software updates:"
+  softwareupdate --install --all
+  echo 'OK'
+fi
+
 # Setup dotfiles
 if [ -n "$GITHUB_USER" ]; then
   DOTFILES_URL="https://github.com/$GITHUB_USER/dotfiles"
 
   if git ls-remote "$DOTFILES_URL" &>/dev/null; then
-    echo  "Fetching $GITHUB_USER/dotfiles from GitHub:"
-    if [ ! -d "$HOME/.dotfiles" ]; then
-      echo "Cloning to ~/.dotfiles:"
-      git clone $Q "$DOTFILES_URL" $HOME/.dotfiles
+    echo  "Fetching $GITHUB_USER/dotfiles from GitHub"
+    if [ ! -d "$DOTFILES" ]; then
+      echo "Cloning to $DOTFILES"
+      git clone $Q "$DOTFILES_URL" $DOTFILES
     else
-      cd $HOME/.dotfiles
+      echo "Pulling to $DOTFILES"
+      cd $DOTFILES
       git pull $Q --rebase --autostash
     fi    
   fi
+fi
+
+# Install from local Brewfile
+if [ -f "$HOME/.Brewfile" ]; then
+  echo "Installing from user Brewfile on GitHub:"
+  brew bundle check --file $DOTFILES/Brewfile || brew bundle --file $DOTFILES/Brewfile
 fi
