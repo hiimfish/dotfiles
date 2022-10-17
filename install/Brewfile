@@ -1,6 +1,7 @@
 tap "homebrew/bundle"
 tap "homebrew/core"
 tap "homebrew/cask"
+tap "homebrew/cask-versions"
 tap "homebrew/cask-fonts"
 tap "buo/cask-upgrade"
 
@@ -37,6 +38,7 @@ cask "soundsource" # Sound and audio controller
 cask "steam" # Video game digital distribution service
 cask "transmission" # Open-source BitTorrent client
 cask "visual-studio-code" # Open-source code editor
+cask "parallels" # Desktop virtualization software
 
 cask "google-chrome"
 cask "tinkerwell"
