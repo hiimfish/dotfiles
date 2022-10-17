@@ -12,7 +12,7 @@ brew "gnupg" # GNU Pretty Good Privacy (PGP) package
 brew "bat" # Clone of cat(1) with syntax highlighting and Git integration
 brew "jq" # Lightweight and flexible command-line JSON processor
 brew "zsh-autosuggestions" # Fish-like fast/unobtrusive autosuggestions for zsh
-brew 'svn' # Needed to install fonts
+brew "svn" # Needed to install fonts
 
 # Development
 brew "python"
@@ -47,13 +47,14 @@ cask "the-unarchiver"
 cask "tuple"
 
 # Fonts
-cask 'font-lato'
-cask 'font-open-sans'
-cask 'font-roboto'
-cask 'font-source-code-pro-for-powerline'
-cask 'font-source-code-pro'
-cask 'font-source-sans-pro'
-cask 'font-source-serif-pro'
+cask "font-fira-code"
+cask "font-lato"
+cask "font-open-sans"
+cask "font-roboto"
+cask "font-source-code-pro-for-powerline"
+cask "font-source-code-pro"
+cask "font-source-sans-pro"
+cask "font-source-serif-pro"
 
 cask "font-abel"
 cask "font-fjalla-one"
