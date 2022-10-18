@@ -2,6 +2,12 @@
 
 My macOS dotfiles.
 
+## Installation
+
+```sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/hiimfish/dotfiles/HEAD/bootstrap.sh)"
+```
+
 ## Components
 
 - **symlink/**: Files in `symlink/` are symlinked into `~/`.

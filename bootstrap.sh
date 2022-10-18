@@ -79,11 +79,11 @@ success () {
 
 fail () {
   printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
-  echo ''
 }
 
 abort () {
   fail $1
+  echo ''
   exit 1
 }
 
@@ -123,7 +123,7 @@ do_stuff() {
       # If _test function returns a string, skip file and print that message.
       skip="$("$1_test" "$file" "$dest")"
       if [[ "$skip" ]]; then
-        fail "Skipping ~/$base, $skip."
+        info "Skipping ~/$base, $skip."
         continue
       fi
       # Destination file already exists in ~/. Back it up!
