@@ -7,7 +7,9 @@ DOTFILES=$HOME/.dotfiles
 BOOTSTRAP_INTERACTIVE=0
 Q='-q'
 
-set -e
+# If backups are needed, this is where they'll go.
+backup_dir="$DOTFILES/backups/$(date "+%Y_%m_%d-%H_%M_%S")/"
+backup=0
 
 # Initialise (or reinitialise) sudo to save unhelpful prompts later.
 sudo_init() {
@@ -74,6 +76,10 @@ success () {
 fail () {
   printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
   echo ''
+}
+
+abort () {
+  fail $1
   exit 1
 }
 
@@ -81,13 +87,64 @@ user () {
   printf "\r  [ \033[0;33m??\033[0m ] $1\n"
 }
 
+# Link files.
+link_header() { info "Linking files into home directory"; }
+link_test() {
+  [[ "$1" -ef "$2" ]] && echo "same file"
+}
+link_do() {
+  success "Linking ~/$1."
+  ln -sf ${2#$HOME/} ~/
+}
+
+do_stuff() {
+  local base dest skip
+  local files=($DOTFILES/$1/*)
+  [[ $(declare -f "$1_files") ]] && files=($($1_files "${files[@]}"))
+  # No files? abort.
+  if (( ${#files[@]} == 0 )); then return; fi
+  # Run _header function only if declared.
+  [[ $(declare -f "$1_header") ]] && "$1_header"
+  # Iterate over files.
+  for file in "${files[@]}"; do
+    base="$(basename $file)"
+    # Get dest path.
+    if [[ $(declare -f "$1_dest") ]]; then
+      dest="$("$1_dest" "$base")"
+    else
+      dest="$HOME/$base"
+    fi
+    # Run _test function only if declared.
+    if [[ $(declare -f "$1_test") ]]; then
+      # If _test function returns a string, skip file and print that message.
+      skip="$("$1_test" "$file" "$dest")"
+      if [[ "$skip" ]]; then
+        fail "Skipping ~/$base, $skip."
+        continue
+      fi
+      # Destination file already exists in ~/. Back it up!
+      if [[ -e "$dest" ]]; then
+        info "Backing up ~/$base."
+        # Set backup flag, so a nice message can be shown at the end.
+        backup=1
+        # Create backup dir if it doesn't already exist.
+        [[ -e "$backup_dir" ]] || mkdir -p "$backup_dir"
+        # Backup file / link / whatever.
+        mv "$dest" "$backup_dir"
+      fi
+    fi
+    # Do stuff.
+    "$1_do" "$base" "$file"
+  done
+}
+
 # We want to always prompt for sudo password
 sudo --reset-timestamp
 sudo -v
 while true; do sudo -n true; sleep 10; kill -0 "$$" || exit; done 2>/dev/null &
 
-[ "$USER" = "root" ] && fail "Run Strap as yourself, not root."
-groups | grep $Q -E "\b(admin)\b" || fail "Add $USER to the admin group."
+[ "$USER" = "root" ] && abort "Run Strap as yourself, not root."
+groups | grep $Q -E "\b(admin)\b" || abort "Add $USER to the admin group."
 
 # Prevent sleeping during script execution, as long as the machine is on AC power
 caffeinate -s -w $$ &
@@ -161,4 +218,11 @@ if [ -f "$DOTFILES/setup/macos.sh" ]; then
   info "Setuping macOS:"
   /bin/sh $DOTFILES/setup/macos.sh
   success
+fi
+
+do_stuff link
+
+# Alert if backups were made.
+if [[ "$backup" ]]; then
+  info "\nBackups were moved to ~/${backup_dir#$HOME/}"
 fi
