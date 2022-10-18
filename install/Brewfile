@@ -3,6 +3,7 @@ tap "homebrew/core"
 tap "homebrew/cask"
 tap "homebrew/cask-versions"
 tap "homebrew/cask-fonts"
+tap "homebrew/services"
 tap "buo/cask-upgrade"
 
 brew "mas" # Mac App Store command-line interface
@@ -41,6 +42,8 @@ cask "steam" # Video game digital distribution service
 cask "transmission" # Open-source BitTorrent client
 cask "visual-studio-code" # Open-source code editor
 cask "parallels" # Desktop virtualization software
+cask "tableplus" # Native GUI tool for relational databases
+cask "paw" # HTTP client that helps testing and describing APIs
 
 cask "google-chrome"
 cask "tinkerwell"
@@ -75,3 +78,4 @@ mas "GoodNotes 5", id: 1444383602
 # mas "Microsoft Word", id: 462054704
 # mas "Microsoft PowerPoint", id: 462062816
 # mas "Microsoft Excel", id: 462058435
+mas "Tomato One", id: 907364780

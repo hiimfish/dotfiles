@@ -231,3 +231,10 @@ do_stuff symlink
 if [[ "$backup" ]]; then
   info "Backups were moved to ~/${backup_dir#$HOME/}"
 fi
+
+# Install mackup
+pip3 install --upgrade mackup
+
+# Setup my home directory
+mkdir -pv $HOME/OSS $HOME/Forceit $HOME/Hiimfish
+ln -vsf "$(pwd -P)" $HOME/OSS/dotfiles
