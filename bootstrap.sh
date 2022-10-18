@@ -9,7 +9,11 @@ Q='-q'
 
 # If backups are needed, this is where they'll go.
 backup_dir="$DOTFILES/backups/$(date "+%Y_%m_%d-%H_%M_%S")/"
-backup=0
+backup=
+
+# Tweak file globbing.
+shopt -s dotglob
+shopt -s nullglob
 
 # Initialise (or reinitialise) sudo to save unhelpful prompts later.
 sudo_init() {
@@ -87,12 +91,12 @@ user () {
   printf "\r  [ \033[0;33m??\033[0m ] $1\n"
 }
 
-# Link files.
-link_header() { info "Linking files into home directory"; }
-link_test() {
+# Symlink files.
+symlink_header() { info "Linking files into home directory"; }
+symlink_test() {
   [[ "$1" -ef "$2" ]] && echo "same file"
 }
-link_do() {
+symlink_do() {
   success "Linking ~/$1."
   ln -sf ${2#$HOME/} ~/
 }
@@ -139,8 +143,8 @@ do_stuff() {
 }
 
 # We want to always prompt for sudo password
-sudo --reset-timestamp
-sudo -v
+# sudo --reset-timestamp
+# sudo -v
 while true; do sudo -n true; sleep 10; kill -0 "$$" || exit; done 2>/dev/null &
 
 [ "$USER" = "root" ] && abort "Run Strap as yourself, not root."
@@ -209,7 +213,8 @@ success
 # Dotfiles Install
 if [ -f "$DOTFILES/install/Brewfile" ]; then
   info "Installing Brewfile:"
-  brew bundle --quiet --file $DOTFILES/install/Brewfile
+  ln -sf $DOTFILES/install/Brewfile ~/.Brewfile
+  brew bundle --global  >/dev/null
   success
 fi
 
@@ -220,9 +225,9 @@ if [ -f "$DOTFILES/setup/macos.sh" ]; then
   success
 fi
 
-do_stuff link
+do_stuff symlink
 
 # Alert if backups were made.
 if [[ "$backup" ]]; then
-  info "\nBackups were moved to ~/${backup_dir#$HOME/}"
+  info "Backups were moved to ~/${backup_dir#$HOME/}"
 fi

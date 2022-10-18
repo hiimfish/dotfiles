@@ -67,7 +67,6 @@ cask "font-sf-mono" # Monospaced variant of "San Francisco" by Apple
 cask "font-signika" # Sans-serif signage typeface with a gentle character
 
 # Mac App Store
-mas "1Blocker", id: 1365531024
 mas "Giphy Capture", id: 668208984
 mas "LINE", id: 539883307
 mas "BetterSnapTool", id: 417375580
