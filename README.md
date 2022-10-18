@@ -11,6 +11,8 @@ My macOS dotfiles.
 ## Components
 
 - **symlink/**: Files in `symlink/` are symlinked into `~/`.
+- **install/**: Install.
+- **setup/**: Setup.
 
 ## Inspiration
 
