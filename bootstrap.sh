@@ -236,7 +236,7 @@ fi
 pip3 install --quiet --upgrade mackup
 
 # Setup my home directory
-mkdir -pv ~/OSS ~/Forceit
-if test ! "$(pwd -P)" -ef ~/OSS/dotfiles; then
-  ln -sf "$(pwd -P)" ~/OSS/dotfiles
+mkdir -pv $HOME/OSS $HOME/Forceit
+if test ! "$(pwd -P)" -ef $HOME/OSS/dotfiles; then
+  ln -sf "$(pwd -P)" $HOME/OSS/dotfiles
 fi
