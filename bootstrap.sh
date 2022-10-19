@@ -233,8 +233,10 @@ if [[ "$backup" ]]; then
 fi
 
 # Install mackup
-pip3 install --upgrade mackup
+pip3 install --quiet --upgrade mackup
 
 # Setup my home directory
-mkdir -pv $HOME/OSS $HOME/Forceit $HOME/Hiimfish
-ln -vsf "$(pwd -P)" $HOME/OSS/dotfiles
+mkdir -pv ~/OSS ~/Forceit
+if test ! "$(pwd -P)" -ef ~/OSS/dotfiles; then
+  ln -sf "$(pwd -P)" ~/OSS/dotfiles
+fi
