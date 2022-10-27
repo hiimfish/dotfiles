@@ -172,7 +172,6 @@ if ! [ -f "/Library/Developer/CommandLineTools/usr/bin/git" ]; then
     | sort -V \
     | tail -n1)
   sudo_askpass softwareupdate -i "$CLT_PACKAGE"
-  sudo_askpass xcode-select -s "/Library/Developer/CommandLineTools"
   sudo_askpass rm -f "$CLT_PLACEHOLDER"
 
   if ! [ -f "/Library/Developer/CommandLineTools/usr/bin/git" ]; then
