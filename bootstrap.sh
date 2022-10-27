@@ -182,7 +182,6 @@ if ! [ -f "/Library/Developer/CommandLineTools/usr/bin/git" ]; then
       getc
       sudo_askpass xcode-select -s "/Library/Developer/CommandLineTools"
   fi
-  sudo_askpass xcodebuild -license accept
 
   success
 fi
