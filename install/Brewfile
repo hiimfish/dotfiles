@@ -45,6 +45,7 @@ cask "parallels" # Desktop virtualization software
 cask "tableplus" # Native GUI tool for relational databases
 cask "paw" # HTTP client that helps testing and describing APIs
 cask "flutter" # UI toolkit for building applications for mobile, web and desktop
+cask "android-studio" # UI toolkit for building applications for mobile, web and desktop
 
 cask "google-chrome"
 cask "tinkerwell"

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 GIT_NAME='hiimfish'
 GIT_EMAIL='chao.yen.po@gmail.com'
 GITHUB_USER='hiimfish'
@@ -69,11 +71,20 @@ sudo_refresh() {
   fi
 }
 
+getc() {
+  local save_state
+  save_state="$(/bin/stty -g)"
+  /bin/stty raw -echo
+  IFS='' read -r -n 1 -d '' "$@"
+  /bin/stty "${save_state}"
+}
+
 info () {
   printf "\r  [ \033[00;34m..\033[0m ] $1\n"
 }
 
 success () {
+  sudo_refresh
   printf "\r\033[2K  [ \033[00;32mOK\033[0m ] $1\n"
 }
 
@@ -142,16 +153,39 @@ do_stuff() {
   done
 }
 
-# We want to always prompt for sudo password
-# sudo --reset-timestamp
-# sudo -v
-while true; do sudo -n true; sleep 10; kill -0 "$$" || exit; done 2>/dev/null &
-
-[ "$USER" = "root" ] && abort "Run Strap as yourself, not root."
+[ "$USER" = "root" ] && abort "Run Bootstrap as yourself, not root."
 groups | grep $Q -E "\b(admin)\b" || abort "Add $USER to the admin group."
 
 # Prevent sleeping during script execution, as long as the machine is on AC power
 caffeinate -s -w $$ &
+
+# Install the Xcode Command Line Tools.
+if ! [ -f "/Library/Developer/CommandLineTools/usr/bin/git" ]; then
+  info "Installing the Xcode Command Line Tools:"
+  CLT_PLACEHOLDER="/tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress"
+  sudo_askpass touch "$CLT_PLACEHOLDER"
+
+  CLT_PACKAGE=$(softwareupdate -l \
+    | grep -B 1 "Command Line Tools" \
+    | awk -F"*" '/^ *\*/ {print $2}' \
+    | sed -e 's/^ *Label: //' -e 's/^ *//' \
+    | sort -V \
+    | tail -n1)
+  sudo_askpass softwareupdate -i "$CLT_PACKAGE"
+  sudo_askpass xcode-select -s "/Library/Developer/CommandLineTools"
+  sudo_askpass rm -f "$CLT_PLACEHOLDER"
+
+  if ! [ -f "/Library/Developer/CommandLineTools/usr/bin/git" ]; then
+      info "Installing the Command Line Tools (expect a GUI popup):"
+      sudo_askpass xcode-select --install
+      user "Press any key when the installation has completed."
+      getc
+      sudo_askpass xcode-select -s "/Library/Developer/CommandLineTools"
+  fi
+  sudo_askpass xcodebuild -license accept
+
+  success
+fi
 
 # Setup Git configuration.
 info "Configuring Git"
