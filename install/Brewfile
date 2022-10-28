@@ -48,7 +48,6 @@ cask "paw" # HTTP client that helps testing and describing APIs
 cask "flutter" # UI toolkit for building applications for mobile, web and desktop
 cask "google-cloud-sdk" # Set of tools to manage resources and applications hosted
 cask "android-studio" # UI toolkit for building applications for mobile, web and desktop
-cask "android-commandlinetools"
 
 cask "google-chrome"
 cask "tinkerwell"
