@@ -20,6 +20,7 @@ brew "lighttpd" # Small memory footprint, flexible web-server
 
 # Development
 brew "python"
+brew "openjdk" # Development kit for the Java programming language
 
 brew "php"
 brew "composer"
@@ -46,7 +47,6 @@ cask "tableplus" # Native GUI tool for relational databases
 cask "paw" # HTTP client that helps testing and describing APIs
 cask "flutter" # UI toolkit for building applications for mobile, web and desktop
 cask "google-cloud-sdk" # Set of tools to manage resources and applications hosted
-cask "openjdk" # Development kit for the Java programming language
 cask "android-studio" # UI toolkit for building applications for mobile, web and desktop
 cask "android-commandlinetools"
 

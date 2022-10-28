@@ -246,7 +246,7 @@ success
 if [ -f "$DOTFILES/install/Brewfile" ]; then
   info "Installing Brewfile:"
   ln -sf $DOTFILES/install/Brewfile ~/.Brewfile
-  brew bundle --global  >/dev/null
+  brew bundle --global --quiet
   success
 fi
 
