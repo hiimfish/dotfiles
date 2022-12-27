@@ -43,7 +43,6 @@ cask "soundsource" # Sound and audio controller
 cask "steam" # Video game digital distribution service
 cask "transmission" # Open-source BitTorrent client
 cask "visual-studio-code" # Open-source code editor
-cask "parallels" # Desktop virtualization software
 cask "tableplus" # Native GUI tool for relational databases
 cask "paw" # HTTP client that helps testing and describing APIs
 cask "flutter" # UI toolkit for building applications for mobile, web and desktop
