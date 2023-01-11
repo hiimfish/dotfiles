@@ -53,6 +53,7 @@ cask "temurin" # JDK from the Eclipse Foundation (Adoptium)
 cask "notion" # App to write, plan, collaborate, and get organized
 cask "microsoft-teams" # Meet, chat, call, and collaborate in just one place
 cask "openvpn-connect" # Client program for the OpenVPN Access Server
+cask "whatsapp" # Desktop client for WhatsApp
 
 cask "google-chrome"
 cask "tinkerwell"
