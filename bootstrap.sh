@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -x
 
 GIT_NAME='hiimfish'
 GIT_EMAIL='chao.yen.po@gmail.com'
