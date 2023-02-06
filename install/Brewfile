@@ -23,6 +23,7 @@ brew "python"
 brew "openjdk" # Development kit for the Java programming language
 
 brew "php"
+brew "php@8.1"
 brew "composer"
 
 brew "imagemagick"
