@@ -17,6 +17,7 @@ brew "jq" # Lightweight and flexible command-line JSON processor
 brew "zsh-autosuggestions" # Fish-like fast/unobtrusive autosuggestions for zsh
 brew "svn" # Needed to install fonts
 brew "lighttpd" # Small memory footprint, flexible web-server
+brew "tmux" # Terminal multiplexer
 
 # Development
 brew "python"
