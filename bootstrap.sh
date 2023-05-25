@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -x
+set -e
 
 GIT_NAME='hiimfish'
 GIT_EMAIL='chao.yen.po@gmail.com'
@@ -37,7 +37,7 @@ sudo_init() {
       unset SUDO_PASSWORD
       echo "!!! Wrong password!" >&2
     done
-    
+
     SUDO_PASSWORD_SCRIPT="$(
       cat <<BASH
 #!/bin/bash
@@ -220,7 +220,16 @@ info "Checking for software updates"
 if softwareupdate -l 2>&1 | grep $Q "No new software available."; then
   info "No new software available."
 else
-  softwareupdate --install --all
+  user ' - Can I reboot?'
+  read answer
+  echo
+
+  # 根據使用者的回答執行不同的動作
+  if [ "$answer" != "${answer#[Yy]}" ]; then
+    sudo_askpass softwareupdate --install --all --restart
+  else
+    softwareupdate --download
+  fi
 fi
 success
 
@@ -237,7 +246,7 @@ if [ -n "$GITHUB_USER" ]; then
       info "Pulling to $DOTFILES."
       cd $DOTFILES
       git pull $Q --rebase --autostash
-    fi    
+    fi
   fi
 fi
 success
