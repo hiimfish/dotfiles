@@ -5,6 +5,7 @@ tap "homebrew/cask-versions"
 tap "homebrew/cask-fonts"
 tap "homebrew/services"
 tap "buo/cask-upgrade"
+tap "hashicorp/tap"
 
 brew "mas" # Mac App Store command-line interface
 brew "gh" # GitHub command-line tool
@@ -18,6 +19,7 @@ brew "zsh-autosuggestions" # Fish-like fast/unobtrusive autosuggestions for zsh
 brew "svn" # Needed to install fonts
 brew "lighttpd" # Small memory footprint, flexible web-server
 brew "tmux" # Terminal multiplexer
+brew "tree"
 
 # Development
 brew "python"
@@ -31,9 +33,11 @@ brew "imagemagick"
 brew "meilisearch"
 brew "mysql"
 brew "nginx"
-brew "node"
 brew "redis"
 brew "openconnect"
+brew "hashicorp/tap/terraform"
+brew "awscli"
+brew "glab"
 
 # Apps
 cask "1password" # Password manager that keeps all passwords secure behind one password

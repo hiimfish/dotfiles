@@ -281,3 +281,7 @@ mkdir -pv $HOME/OSS $HOME/Forceit
 if test ! "$(pwd -P)" -ef $HOME/OSS/dotfiles; then
   ln -sf "$(pwd -P)" $HOME/OSS/dotfiles
 fi
+
+if test ! -x "$(which nvm)"; then
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh)"
+fi
