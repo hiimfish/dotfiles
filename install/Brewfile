@@ -10,6 +10,7 @@ tap "hashicorp/tap"
 brew "mas" # Mac App Store command-line interface
 brew "gh" # GitHub command-line tool
 brew "git-delta" # Syntax-highlighting pager for git and diff output
+brew "git-lfs" # Git extension for versioning large files
 brew "coreutils" # Those that come with macOS are outdated
 brew "ack" # Search tool like grep, but optimized for programmers
 brew "gnupg" # GNU Pretty Good Privacy (PGP) package
@@ -23,6 +24,7 @@ brew "tree"
 brew "gnu-tar"
 brew "terraformer"
 brew "terragrunt"
+brew "packer"
 
 # Development
 brew "python"
