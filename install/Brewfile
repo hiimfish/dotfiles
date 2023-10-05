@@ -20,6 +20,7 @@ brew "zsh-autosuggestions" # Fish-like fast/unobtrusive autosuggestions for zsh
 brew "svn" # Needed to install fonts
 brew "lighttpd" # Small memory footprint, flexible web-server
 brew "tmux" # Terminal multiplexer
+brew "pre-commit"
 brew "tree"
 brew "gnu-tar"
 brew "terraformer"
