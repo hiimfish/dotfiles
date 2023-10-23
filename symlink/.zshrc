@@ -120,6 +120,9 @@ source $ZSH/oh-my-zsh.sh
 
 alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'
 
+alias tf="terraform"
+alias terrafrom="terraform"
+
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terraform terraform
 

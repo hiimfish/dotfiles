@@ -139,3 +139,5 @@
 	stash = normal dim
 	grafted = normal bold
 	HEAD = normal italic
+[http]
+	postBuffer = 524288000
