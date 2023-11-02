@@ -26,6 +26,7 @@ brew "gnu-tar"
 brew "terraformer"
 brew "terragrunt"
 brew "packer"
+brew "ansible"
 
 # Development
 brew "python"
