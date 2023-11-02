@@ -124,7 +124,7 @@ alias tf="terraform"
 alias terrafrom="terraform"
 alias abook="ansible-playbook"
 alias abook-zm-uat="ansible-playbook -i zm-uat-hosts -e @vars/zm-uat.yml"
-alias abook-fc-mgnt="ansible-playbook -i fc-mgmt-hosts -e @vars/fc-mgmt.yml"
+alias abook-fc-mgmt="ansible-playbook -i fc-mgmt-hosts -e @vars/fc-mgmt.yml"
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terraform terraform
