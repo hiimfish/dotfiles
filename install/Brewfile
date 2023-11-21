@@ -46,6 +46,7 @@ brew "openconnect"
 brew "hashicorp/tap/terraform"
 brew "awscli"
 brew "glab"
+brew "aliyun-cli"
 
 # Apps
 cask "1password" # Password manager that keeps all passwords secure behind one password
