@@ -124,6 +124,7 @@ alias tf="terraform"
 alias terrafrom="terraform"
 alias abook="ansible-playbook"
 alias abook-zm-uat="ansible-playbook -i zm-uat-hosts -e @vars/zm-uat.yml"
+alias abook-zm-prod="ansible-playbook -i zm-prod-hosts -e @vars/zm-prod.yml"
 alias abook-fc-mgmt="ansible-playbook -i fc-mgmt-hosts -e @vars/fc-mgmt.yml"
 
 autoload -U +X bashcompinit && bashcompinit
@@ -132,3 +133,5 @@ complete -o nospace -C /usr/local/bin/terraform terraform
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export PATH="/usr/local/opt/ansible@7/bin:$PATH"
