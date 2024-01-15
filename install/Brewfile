@@ -37,7 +37,7 @@ brew "php"
 brew "php@8.1"
 brew "composer"
 
-brew "imagemagick"
+brew "imagemagick" # Tools and libraries to manipulate images in many formats
 brew "meilisearch"
 brew "mysql"
 brew "nginx"
@@ -47,6 +47,7 @@ brew "hashicorp/tap/terraform"
 brew "awscli"
 brew "glab"
 brew "aliyun-cli"
+brew "tesseract" # OCR (Optical Character Recognition) engine
 
 # Apps
 cask "1password" # Password manager that keeps all passwords secure behind one password
