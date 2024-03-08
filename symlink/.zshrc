@@ -135,3 +135,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 export PATH="/usr/local/opt/ansible@7/bin:$PATH"
+
+export PATH="$HOME/.asdf/shims:$PATH"
+
+. /usr/local/opt/asdf/libexec/asdf.sh
+
+export PATH=$(composer global config bin-dir --absolute --quiet):$PATH

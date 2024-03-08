@@ -1,6 +1,6 @@
 tap "homebrew/bundle"
-tap "homebrew/core"
-tap "homebrew/cask"
+# tap "homebrew/core"
+# tap "homebrew/cask"
 tap "homebrew/cask-versions"
 tap "homebrew/cask-fonts"
 tap "homebrew/services"
@@ -48,6 +48,7 @@ brew "awscli"
 brew "glab"
 brew "aliyun-cli"
 brew "tesseract" # OCR (Optical Character Recognition) engine
+brew "asdf"
 
 # Apps
 cask "1password" # Password manager that keeps all passwords secure behind one password
@@ -73,7 +74,7 @@ cask "whatsapp" # Desktop client for WhatsApp
 cask "multipass" # Orchestrates virtual Ubuntu instances
 
 cask "google-chrome"
-cask "tinkerwell"
+# cask "tinkerwell"
 cask "discord"
 cask "docker"
 cask "telegram-desktop"
