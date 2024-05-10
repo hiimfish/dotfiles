@@ -49,6 +49,7 @@ brew "glab"
 brew "aliyun-cli"
 brew "tesseract" # OCR (Optical Character Recognition) engine
 brew "asdf"
+brew "infracost"
 
 # Apps
 cask "1password" # Password manager that keeps all passwords secure behind one password
@@ -80,6 +81,7 @@ cask "docker"
 cask "telegram-desktop"
 cask "the-unarchiver"
 cask "tuple"
+cask "warp"
 
 # Fonts
 cask "font-fira-code"

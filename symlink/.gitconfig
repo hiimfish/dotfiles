@@ -7,7 +7,7 @@
     # GitHub username for command-line tools.
 	user = hiimfish
 [credential]
-	helper = osxkeychain    
+	helper = store
 [color]
 	# Colour terminal command output when possible.
 	ui = auto
@@ -39,6 +39,7 @@
 	commitGraph = true
 	# Output unicode characters (e.g. emoji).
 	quotepath = on
+	autocrlf = input
 [help]
   # Autocorrect mistyped commands.
 	autocorrect = 1
