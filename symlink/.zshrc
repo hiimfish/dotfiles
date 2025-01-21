@@ -126,6 +126,7 @@ alias abook="ansible-playbook"
 alias abook-zm-uat="ansible-playbook -i zm-uat-hosts -e @vars/zm-uat.yml"
 alias abook-zm-prod="ansible-playbook -i zm-prod-hosts -e @vars/zm-prod.yml"
 alias abook-fc-mgmt="ansible-playbook -i fc-mgmt-hosts -e @vars/fc-mgmt.yml"
+alias abook-devops-mgmt="ansible-playbook -i devops-mgmt-hosts -e @vars/devops-mgmt.yml"
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terraform terraform
@@ -141,3 +142,15 @@ export PATH="$HOME/.asdf/shims:$PATH"
 . /usr/local/opt/asdf/libexec/asdf.sh
 
 export PATH=$(composer global config bin-dir --absolute --quiet):$PATH
+
+
+# Herd injected PHP 8.3 configuration.
+export HERD_PHP_83_INI_SCAN_DIR="/Users/hiimfish/Library/Application Support/Herd/config/php/83/"
+
+
+# Herd injected PHP binary.
+export PATH="/Users/hiimfish/Library/Application Support/Herd/bin/":$PATH
+
+
+# Herd injected PHP 8.2 configuration.
+export HERD_PHP_82_INI_SCAN_DIR="/Users/hiimfish/Library/Application Support/Herd/config/php/82/"
