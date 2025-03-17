@@ -6,282 +6,99 @@ GIT_NAME='hiimfish'
 GIT_EMAIL='chao.yen.po@gmail.com'
 GITHUB_USER='hiimfish'
 DOTFILES=$HOME/.dotfiles
-BOOTSTRAP_INTERACTIVE=0
 Q='-q'
 
-# If backups are needed, this is where they'll go.
-backup_dir="$DOTFILES/backups/$(date "+%Y_%m_%d-%H_%M_%S")/"
-backup=
+# Tweak file globbing
+shopt -s dotglob nullglob
 
-# Tweak file globbing.
-shopt -s dotglob
-shopt -s nullglob
+# 確保使用者不是 root
+[ "$USER" = "root" ] && { echo "請不要以 root 身份執行此腳本"; exit 1; }
+groups | grep -qE "\b(admin)\b" || { echo "請將 $USER 加入 admin 群組"; exit 1; }
 
-# Initialise (or reinitialise) sudo to save unhelpful prompts later.
-sudo_init() {
-  if [ -z "$BOOTSTRAP_INTERACTIVE" ]; then
-    return
-  fi
+# 初始化 sudo（避免多次輸入密碼）
+sudo -v
 
-  local SUDO_PASSWORD SUDO_PASSWORD_SCRIPT
-
-  if ! sudo --validate --non-interactive &>/dev/null; then
-    while true; do
-      user ' - What is your sudo password?'
-      read -rse SUDO_PASSWORD
-      echo
-      if sudo --validate --stdin 2>/dev/null <<<"$SUDO_PASSWORD"; then
-        break
-      fi
-
-      unset SUDO_PASSWORD
-      echo "!!! Wrong password!" >&2
-    done
-
-    SUDO_PASSWORD_SCRIPT="$(
-      cat <<BASH
-#!/bin/bash
-echo "$SUDO_PASSWORD"
-BASH
-    )"
-    unset SUDO_PASSWORD
-    SUDO_ASKPASS_DIR="$(mktemp -d)"
-    SUDO_ASKPASS="$(mktemp "$SUDO_ASKPASS_DIR"/strap-askpass-XXXXXXXX)"
-    chmod 700 "$SUDO_ASKPASS_DIR" "$SUDO_ASKPASS"
-    bash -c "cat > '$SUDO_ASKPASS'" <<<"$SUDO_PASSWORD_SCRIPT"
-    unset SUDO_PASSWORD_SCRIPT
-
-    export SUDO_ASKPASS
-  fi
-}
-
-sudo_askpass() {
-  if [ -n "$SUDO_ASKPASS" ]; then
-    sudo --askpass "$@"
-  else
-    sudo "$@"
-  fi
-}
-
-sudo_refresh() {
-  if [ -n "$SUDO_ASKPASS" ]; then
-    sudo --askpass --validate
-  else
-    sudo_init
-  fi
-}
-
-getc() {
-  local save_state
-  save_state="$(/bin/stty -g)"
-  /bin/stty raw -echo
-  IFS='' read -r -n 1 -d '' "$@"
-  /bin/stty "${save_state}"
-}
-
-info () {
-  printf "\r  [ \033[00;34m..\033[0m ] $1\n"
-}
-
-success () {
-  sudo_refresh
-  printf "\r\033[2K  [ \033[00;32mOK\033[0m ] $1\n"
-}
-
-fail () {
-  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
-}
-
-abort () {
-  fail $1
-  echo ''
-  exit 1
-}
-
-user () {
-  printf "\r  [ \033[0;33m??\033[0m ] $1\n"
-}
-
-# Symlink files.
-symlink_header() { info "Linking files into home directory"; }
-symlink_test() {
-  [[ "$1" -ef "$2" ]] && echo "same file"
-}
-symlink_do() {
-  success "Linking ~/$1."
-  ln -sf ${2#$HOME/} ~/
-}
-
-do_stuff() {
-  local base dest skip
-  local files=($DOTFILES/$1/*)
-  [[ $(declare -f "$1_files") ]] && files=($($1_files "${files[@]}"))
-  # No files? abort.
-  if (( ${#files[@]} == 0 )); then return; fi
-  # Run _header function only if declared.
-  [[ $(declare -f "$1_header") ]] && "$1_header"
-  # Iterate over files.
-  for file in "${files[@]}"; do
-    base="$(basename $file)"
-    # Get dest path.
-    if [[ $(declare -f "$1_dest") ]]; then
-      dest="$("$1_dest" "$base")"
-    else
-      dest="$HOME/$base"
-    fi
-    # Run _test function only if declared.
-    if [[ $(declare -f "$1_test") ]]; then
-      # If _test function returns a string, skip file and print that message.
-      skip="$("$1_test" "$file" "$dest")"
-      if [[ "$skip" ]]; then
-        info "Skipping ~/$base, $skip."
-        continue
-      fi
-      # Destination file already exists in ~/. Back it up!
-      if [[ -e "$dest" ]]; then
-        info "Backing up ~/$base."
-        # Set backup flag, so a nice message can be shown at the end.
-        backup=1
-        # Create backup dir if it doesn't already exist.
-        [[ -e "$backup_dir" ]] || mkdir -p "$backup_dir"
-        # Backup file / link / whatever.
-        mv "$dest" "$backup_dir"
-      fi
-    fi
-    # Do stuff.
-    "$1_do" "$base" "$file"
-  done
-}
-
-[ "$USER" = "root" ] && abort "Run Bootstrap as yourself, not root."
-groups | grep $Q -E "\b(admin)\b" || abort "Add $USER to the admin group."
-
-# Prevent sleeping during script execution, as long as the machine is on AC power
+# 防止 Mac 進入睡眠模式（僅限 AC 電源）
 caffeinate -s -w $$ &
 
-# Install the Xcode Command Line Tools.
+# 裝 Xcode Command Line Tools
 if ! [ -f "/Library/Developer/CommandLineTools/usr/bin/git" ]; then
-  info "Installing the Xcode Command Line Tools:"
-  CLT_PLACEHOLDER="/tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress"
-  sudo_askpass touch "$CLT_PLACEHOLDER"
+  echo "安裝 Xcode Command Line Tools..."
+  sudo touch "/tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress"
+  CLT_PACKAGE=$(softwareupdate -l | grep -B 1 "Command Line Tools" | awk -F"*" '/^ *\*/ {print $2}' | sed -e 's/^ *Label: //' -e 's/^ *//' | sort -V | tail -n1)
+  sudo softwareupdate -i "$CLT_PACKAGE" --agree-to-license
+  sudo rm -f "/tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress"
 
-  CLT_PACKAGE=$(softwareupdate -l \
-    | grep -B 1 "Command Line Tools" \
-    | awk -F"*" '/^ *\*/ {print $2}' \
-    | sed -e 's/^ *Label: //' -e 's/^ *//' \
-    | sort -V \
-    | tail -n1)
-  sudo_askpass softwareupdate -i "$CLT_PACKAGE"
-  sudo_askpass rm -f "$CLT_PLACEHOLDER"
-
+  # 確保 Xcode CLI 工具安裝成功
   if ! [ -f "/Library/Developer/CommandLineTools/usr/bin/git" ]; then
-      info "Installing the Command Line Tools (expect a GUI popup):"
-      sudo_askpass xcode-select --install
-      user "Press any key when the installation has completed."
-      getc
-      sudo_askpass xcode-select -s "/Library/Developer/CommandLineTools"
+    echo "手動安裝 Xcode Command Line Tools（會彈出 GUI）："
+    sudo xcode-select --install
+    read -p "安裝完成後請按 Enter 繼續..."
+    sudo xcode-select -s "/Library/Developer/CommandLineTools"
   fi
-
-  success
 fi
 
-# Setup Git configuration.
-info "Configuring Git"
-if [ -n "$GIT_NAME" ] && ! git config user.name >/dev/null; then
-  git config --global user.name "$GIT_NAME"
-fi
+# 設定 Git
+echo "設定 Git..."
+git config --global user.name "$GIT_NAME"
+git config --global user.email "$GIT_EMAIL"
+git config --global github.user "$GITHUB_USER"
 
-if [ -n "$GIT_EMAIL" ] && ! git config user.email >/dev/null; then
-  git config --global user.email "$GIT_EMAIL"
-fi
-
-if [ -n "$GITHUB_USER" ] && [ "$(git config github.user)" != "$GITHUB_USER" ]; then
-  git config --global github.user "$GITHUB_USER"
-fi
-
-# Check for Homebrew and install if we don't have it
-if test ! -x "$(which brew)"; then
+# 安裝 Homebrew
+if ! command -v brew &>/dev/null; then
+  echo "安裝 Homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-  UNAME_MACHINE="$(/usr/bin/uname -m)"
-  if [[ $UNAME_MACHINE == "arm64" ]]; then
-    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-  fi
+  [[ $(uname -m) == "arm64" ]] && echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# Check for Oh My Zsh and install if we don't have it
-if test ! -d "$ZSH"; then
-  /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)"
+# 安裝 Oh My Zsh
+if [ ! -d "$ZSH" ]; then
+  echo "安裝 Oh My Zsh..."
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)"
 fi
 
-# Check and install any remaining software updates.
-info "Checking for software updates"
-if softwareupdate -l 2>&1 | grep $Q "No new software available."; then
-  info "No new software available."
+# 檢查 macOS 更新
+echo "檢查 macOS 更新..."
+if softwareupdate -l 2>&1 | grep -q "No new software available."; then
+  echo "macOS 已是最新版本。"
 else
-  user ' - Can I reboot?'
-  read answer
-  echo
-
-  # 根據使用者的回答執行不同的動作
-  if [ "$answer" != "${answer#[Yy]}" ]; then
-    sudo_askpass softwareupdate --install --all --restart
+  read -p "有可用的 macOS 更新，是否重新啟動以安裝？(Y/N): " answer
+  if [[ "$answer" =~ ^[Yy]$ ]]; then
+    sudo softwareupdate --install --all --restart
   else
     softwareupdate --download
   fi
 fi
-success
 
-# Setup dotfiles project
-if [ -n "$GITHUB_USER" ]; then
-  DOTFILES_URL="https://github.com/$GITHUB_USER/dotfiles"
-
-  if git ls-remote "$DOTFILES_URL" &>/dev/null; then
-    info  "Fetching $GITHUB_USER/dotfiles from GitHub:"
-    if [ ! -d "$DOTFILES" ]; then
-      info "Cloning to $DOTFILES."
-      git clone $Q "$DOTFILES_URL" $DOTFILES
-    else
-      info "Pulling to $DOTFILES."
-      cd $DOTFILES
-      git pull $Q --rebase --autostash
-    fi
+# Clone dotfiles
+if git ls-remote "https://github.com/$GITHUB_USER/dotfiles" &>/dev/null; then
+  echo "下載 dotfiles..."
+  if [ ! -d "$DOTFILES" ]; then
+    git clone "$Q" "https://github.com/$GITHUB_USER/dotfiles" "$DOTFILES"
+  else
+    git -C "$DOTFILES" pull "$Q" --rebase --autostash
   fi
 fi
-success
 
-# Dotfiles Install
+# 安裝 Homebrew 軟體
 if [ -f "$DOTFILES/install/Brewfile" ]; then
-  info "Installing Brewfile:"
-  ln -sf $DOTFILES/install/Brewfile ~/.Brewfile
+  echo "安裝 Brewfile 軟體..."
+  ln -sf "$DOTFILES/install/Brewfile" ~/.Brewfile
   brew bundle --global --quiet
-  success
 fi
 
-# Dotfiles Setup
+# 執行 macOS 設定腳本
 if [ -f "$DOTFILES/setup/macos.sh" ]; then
-  info "Setuping macOS:"
-  /bin/sh $DOTFILES/setup/macos.sh
-  success
+  echo "執行 macOS 設定腳本..."
+  /bin/sh "$DOTFILES/setup/macos.sh"
 fi
 
-do_stuff symlink
+# 建立必要的目錄
+mkdir -pv "$HOME/OSS" "$HOME/Forceit"
+ln -sf "$(pwd -P)" "$HOME/OSS/dotfiles"
 
-# Alert if backups were made.
-if [[ "$backup" ]]; then
-  info "Backups were moved to ~/${backup_dir#$HOME/}"
-fi
-
-# Install mackup
+# 安裝 Mackup
 pip3 install --quiet --upgrade mackup
 
-# Setup my home directory
-mkdir -pv $HOME/OSS $HOME/Forceit
-if test ! "$(pwd -P)" -ef $HOME/OSS/dotfiles; then
-  ln -sf "$(pwd -P)" $HOME/OSS/dotfiles
-fi
-
-if test ! -x "$(which nvm)"; then
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh)"
-fi
+echo "✅ 設定完成！請重新啟動終端機以應用所有變更。"
