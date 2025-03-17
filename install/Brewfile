@@ -49,6 +49,10 @@ cask "visual-studio-code"
 cask "docker"
 cask "warp"
 cask "multipass" # Ubuntu VM manager
+cask "dbngin"
+cask "herd"
+cask "rapidapi"
+cask "jetbrains-toolbox"
 
 # Applications
 cask "1password"
