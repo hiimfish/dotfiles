@@ -46,7 +46,6 @@ brew "composer"
 
 # Development Applications
 cask "visual-studio-code"
-cask "paw"
 cask "docker"
 cask "warp"
 cask "multipass" # Ubuntu VM manager

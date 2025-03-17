@@ -96,9 +96,6 @@ fi
 
 # 建立必要的目錄
 mkdir -pv "$HOME/OSS" "$HOME/Forceit"
-ln -sf "$(pwd -P)" "$HOME/OSS/dotfiles"
-
-# 安裝 Mackup
-pip3 install --quiet --upgrade mackup
+# ln -sf "$(pwd -P)" "$HOME/OSS/dotfiles"
 
 echo "✅ 設定完成！請重新啟動終端機以應用所有變更。"
