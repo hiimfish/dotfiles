@@ -65,7 +65,7 @@ cask "discord"
 cask "telegram-desktop"
 cask "the-unarchiver"
 cask "gather"
-cask "zen-browser"
+cask "arc"
 
 # Fonts
 cask "font-fira-code"
