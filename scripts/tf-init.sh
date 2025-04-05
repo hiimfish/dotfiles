@@ -68,7 +68,7 @@ if [ -z "$REGION" ]; then
 fi
 
 # === Step 3: 輸入 S3 前綴，並組出 bucket 名稱 ===
-read -p "請輸入 S3 Bucket 前綴 (例如：yourname)： " PREFIX
+read -p "請輸入 S3 Bucket 前綴 (例如：xa-uat)： " PREFIX
 BUCKET_NAME="${PREFIX}-${REGION}-terraform-state"
 
 # === Step 4: 檢查 bucket 是否已存在 ===
