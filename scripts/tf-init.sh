@@ -106,7 +106,7 @@ else
 fi
 
 # === Step 5: 建立並標記兩個 EIP ===
-create_eip_if_needed "nat_gateway"
+create_eip_if_needed "nat-gateway"
 create_eip_if_needed "bastion"
 
 echo "🎉 所有資源建立完成！可以開始 terraform 初始化囉。"
