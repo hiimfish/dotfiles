@@ -74,13 +74,6 @@ BUCKET_NAME="${PREFIX}-${REGION}-terraform-state"
 # === Step 4: 檢查 bucket 是否已存在 ===
 if aws s3api head-bucket --bucket "$BUCKET_NAME" --profile "$PROFILE" 2>/dev/null; then
   echo "⚠️  S3 bucket '$BUCKET_NAME' 已存在。"
-  read -p "你想繼續使用這個 bucket 嗎？(y/N): " CONTINUE
-  if [[ "$CONTINUE" != "y" && "$CONTINUE" != "Y" ]]; then
-    echo "❌ 請選擇其他前綴再執行一次。"
-    exit 1
-  else
-    echo "✅ 使用現有 bucket: $BUCKET_NAME"
-  fi
 else
   echo "🚀 正在創建 S3 bucket: $BUCKET_NAME ..."
   if [ "$REGION" == "us-east-1" ]; then
@@ -103,6 +96,29 @@ else
     --profile "$PROFILE"
 
   echo "✅ S3 bucket 建立完成並已啟用版本控制: $BUCKET_NAME"
+fi
+
+BUCKET_NAME="${PREFIX}-${REGION}-alb-logs"
+
+# === Step 4: 檢查 bucket 是否已存在 ===
+if aws s3api head-bucket --bucket "$BUCKET_NAME" --profile "$PROFILE" 2>/dev/null; then
+  echo "⚠️  S3 bucket '$BUCKET_NAME' 已存在。"
+else
+  echo "🚀 正在創建 S3 bucket: $BUCKET_NAME ..."
+  if [ "$REGION" == "us-east-1" ]; then
+    aws s3api create-bucket \
+      --bucket "$BUCKET_NAME" \
+      --region "$REGION" \
+      --profile "$PROFILE"
+  else
+    aws s3api create-bucket \
+      --bucket "$BUCKET_NAME" \
+      --region "$REGION" \
+      --create-bucket-configuration LocationConstraint="$REGION" \
+      --profile "$PROFILE"
+  fi
+
+  echo "✅ S3 bucket 建立完成: $BUCKET_NAME"
 fi
 
 # === Step 5: 建立並標記兩個 EIP ===
