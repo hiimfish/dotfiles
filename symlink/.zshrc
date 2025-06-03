@@ -130,6 +130,8 @@ alias abook-fc-mgmt="ansible-playbook -i fc-mgmt-hosts -e @vars/fc-mgmt.yml"
 alias abook-devops-mgmt="ansible-playbook -i devops-mgmt-hosts -e @vars/devops-mgmt.yml"
 alias abook-xa-uat="ansible-playbook -i xa-uat-hosts -e @vars/xa-uat.yml"
 alias abook-xa-prod="ansible-playbook -i xa-prod-hosts -e @vars/xa-prod.yml"
+alias abook-seo-uat="ansible-playbook -i seo-uat-hosts -e @vars/seo-uat.yml"
+alias abook-seo-prod="ansible-playbook -i seo-prod-hosts -e @vars/seo-prod.yml"
 
 # autoload -U +X bashcompinit && bashcompinit
 # complete -o nospace -C /usr/local/bin/terraform terraform
