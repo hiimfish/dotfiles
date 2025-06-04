@@ -2,11 +2,61 @@
 
 set -e
 
-GIT_NAME='hiimfish'
-GIT_EMAIL='chao.yen.po@gmail.com'
+GIT_NAME='js-esusux'
+GIT_EMAIL='js-esusux@bob.com'
 GITHUB_USER='hiimfish'
 DOTFILES=$HOME/.dotfiles
 Q='-q'
+
+# Symlink files.
+symlink_header() { echo "Linking files into home directory"; }
+symlink_test() {
+  [[ "$1" -ef "$2" ]] && echo "same file"
+}
+symlink_do() {
+  echo "Linking ~/$1."
+  ln -sf ${2#$HOME/} ~/
+}
+do_stuff() {
+  local base dest skip
+  local files=($DOTFILES/$1/*)
+  [[ $(declare -f "$1_files") ]] && files=($($1_files "${files[@]}"))
+  # No files? abort.
+  if (( ${#files[@]} == 0 )); then return; fi
+  # Run _header function only if declared.
+  [[ $(declare -f "$1_header") ]] && "$1_header"
+  # Iterate over files.
+  for file in "${files[@]}"; do
+    base="$(basename $file)"
+    # Get dest path.
+    if [[ $(declare -f "$1_dest") ]]; then
+      dest="$("$1_dest" "$base")"
+    else
+      dest="$HOME/$base"
+    fi
+    # Run _test function only if declared.
+    if [[ $(declare -f "$1_test") ]]; then
+      # If _test function returns a string, skip file and print that message.
+      skip="$("$1_test" "$file" "$dest")"
+      if [[ "$skip" ]]; then
+        echo "Skipping ~/$base, $skip."
+        continue
+      fi
+      # Destination file already exists in ~/. Back it up!
+      if [[ -e "$dest" ]]; then
+        echo "Backing up ~/$base."
+        # Set backup flag, so a nice message can be shown at the end.
+        backup=1
+        # Create backup dir if it doesn't already exist.
+        [[ -e "$backup_dir" ]] || mkdir -p "$backup_dir"
+        # Backup file / link / whatever.
+        mv "$dest" "$backup_dir"
+      fi
+    fi
+    # Do stuff.
+    "$1_do" "$base" "$file"
+  done
+}
 
 # Tweak file globbing
 shopt -s dotglob nullglob
@@ -81,6 +131,8 @@ if git ls-remote "https://github.com/$GITHUB_USER/dotfiles" &>/dev/null; then
   fi
 fi
 
+do_stuff symlink
+
 # 安裝 Homebrew 軟體
 if [ -f "$DOTFILES/install/Brewfile" ]; then
   echo "安裝 Brewfile 軟體..."
@@ -95,7 +147,15 @@ if [ -f "$DOTFILES/setup/macos.sh" ]; then
 fi
 
 # 建立必要的目錄
-mkdir -pv "$HOME/OSS" "$HOME/Forceit"
+mkdir -pv "$HOME/OSS" "$HOME/Forceit" "$HOME/YT"
 # ln -sf "$(pwd -P)" "$HOME/OSS/dotfiles"
+
+# 安裝前端環境
+volta install node
+volta install yarn
+volta install pnpm
+# volta install bun
+# volta install turbo
+# volta install next
 
 echo "✅ 設定完成！請重新啟動終端機以應用所有變更。"

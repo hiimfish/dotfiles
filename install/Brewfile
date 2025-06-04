@@ -1,7 +1,7 @@
-tap "homebrew/bundle"
-tap "homebrew/cask-versions"
-tap "homebrew/cask-fonts"
-tap "homebrew/services"
+# tap "homebrew/bundle"
+# tap "homebrew/cask-versions"
+# tap "homebrew/cask-fonts"
+# tap "homebrew/services"
 tap "buo/cask-upgrade"
 tap "hashicorp/tap"
 
@@ -30,7 +30,7 @@ cask "google-cloud-sdk"
 brew "imagemagick" # Image processing
 brew "terraformer" # Infrastructure as Code tool
 brew "terragrunt" # Terraform wrapper
-brew "packer" # Machine image builder
+# brew "packer" # Machine image builder
 brew "ansible" # IT automation
 brew "hashicorp/tap/terraform" # Terraform
 brew "infracost" # Cloud cost estimation
@@ -44,7 +44,12 @@ brew "python"
 # PHP
 brew "composer"
 
+# JS
+brew "volta" # 取代 nvm
+
 # Development Applications
+cask "charles" # HTTP 请求调试工具
+cask "drawio" # 图形工具
 cask "visual-studio-code"
 cask "docker"
 cask "warp"

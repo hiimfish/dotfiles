@@ -1,8 +1,8 @@
 [user]
     # Name used in commit messages.
-	name = hiimfish
+	name = js-esusux
     # Email used in commit messages.
-	email = chao.yen.po@gmail.com
+	email = js-esusux@bob.com
 [github]
     # GitHub username for command-line tools.
 	user = hiimfish
