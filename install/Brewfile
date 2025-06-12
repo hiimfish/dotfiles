@@ -47,6 +47,10 @@ brew "composer"
 # JS
 brew "volta" # 取代 nvm
 
+# DevOps
+brew "fluent-bit"
+brew "minikube"
+
 # Development Applications
 cask "charles" # HTTP 请求调试工具
 cask "drawio" # 图形工具

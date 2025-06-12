@@ -165,3 +165,5 @@ export PATH="$HOME/Library/Application Support/Herd/bin/":$PATH
 
 # Volta
 export PATH="$HOME/.volta/bin/":$PATH
+
+flbBookRootDir=$HOME/OSS/Logs-and-Telemetry--Using-Fluent-Bit
