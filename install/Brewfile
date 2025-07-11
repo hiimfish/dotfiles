@@ -28,9 +28,9 @@ brew "awscli" # AWS command-line tools
 brew "aliyun-cli" # Alibaba Cloud CLI
 cask "google-cloud-sdk"
 brew "imagemagick" # Image processing
-brew "terraformer" # Infrastructure as Code tool
-brew "terragrunt" # Terraform wrapper
-# brew "packer" # Machine image builder
+# brew "terraformer" # Infrastructure as Code tool (deprecated) 由 tenv 替代
+# brew "terragrunt" # Terraform wrapper (deprecated) 由 tenv 替代
+# brew "packer" # Machine image builder (deprecated) 由 tenv 替代
 brew "ansible" # IT automation
 brew "hashicorp/tap/terraform" # Terraform
 brew "infracost" # Cloud cost estimation
