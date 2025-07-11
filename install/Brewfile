@@ -37,6 +37,7 @@ brew "infracost" # Cloud cost estimation
 brew "asdf" # Version manager
 brew "tesseract" # OCR engine
 brew "mackup" # Keep your application settings in sync
+brew "cookiecutter" # Create projects from project templates
 
 # Python
 brew "python"
