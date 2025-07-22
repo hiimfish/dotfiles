@@ -31,8 +31,9 @@ brew "imagemagick" # Image processing
 # brew "terraformer" # Infrastructure as Code tool (deprecated) 由 tenv 替代
 # brew "terragrunt" # Terraform wrapper (deprecated) 由 tenv 替代
 # brew "packer" # Machine image builder (deprecated) 由 tenv 替代
+# brew "hashicorp/tap/terraform" # Terraform (deprecated) 由 tenv 替代
+brew "tenv" # Terraform version manager
 brew "ansible" # IT automation
-brew "hashicorp/tap/terraform" # Terraform
 brew "infracost" # Cloud cost estimation
 brew "asdf" # Version manager
 brew "tesseract" # OCR engine
@@ -90,5 +91,5 @@ cask "font-sf-mono"
 cask "font-signika"
 
 # Mac App Store Apps
-mas "LINE", id: 539883307
+# mas "LINE", id: 539883307
 mas "Tomato One", id: 907364780
