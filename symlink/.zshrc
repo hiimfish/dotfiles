@@ -172,3 +172,7 @@ flbBookRootDir=$HOME/OSS/Logs-and-Telemetry--Using-Fluent-Bit
 # Herd injected PHP 8.4 configuration.
 export HERD_PHP_84_INI_SCAN_DIR="/Users/admin/Library/Application Support/Herd/config/php/84/"
 export PATH="/usr/local/opt/mysql-client/bin:$PATH"
+
+
+# Herd injected PHP 8.4 configuration.
+export HERD_PHP_84_INI_SCAN_DIR="/Users/hiimfsih/Library/Application Support/Herd/config/php/84/"
