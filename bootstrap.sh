@@ -14,8 +14,8 @@ symlink_test() {
   [[ "$1" -ef "$2" ]] && echo "same file"
 }
 symlink_do() {
-  echo "Linking ~/$1."
-  ln -sf ${2#$HOME/} ~/
+  echo "Linking ~/$1 -> $2"
+  ln -sfn "$2" "$HOME/$1"
 }
 do_stuff() {
   local base dest skip

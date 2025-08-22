@@ -1,0 +1,6 @@
+[user]
+    # Name used in commit messages.
+	name = js-esusux
+    # Email used in commit messages.
+	email = js-esusux@bob.com
+	

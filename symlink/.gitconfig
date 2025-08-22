@@ -1,8 +1,8 @@
 [user]
     # Name used in commit messages.
-	name = js-esusux
+	name = hiimfish
     # Email used in commit messages.
-	email = js-esusux@bob.com
+	email = chao.yen.po@gmail.com
 [github]
     # GitHub username for command-line tools.
 	user = hiimfish
@@ -142,3 +142,5 @@
 	HEAD = normal italic
 [http]
 	postBuffer = 524288000
+[includeIf "gitdir:~/YT/**"]
+  path = ~/.gitconfig-yt
