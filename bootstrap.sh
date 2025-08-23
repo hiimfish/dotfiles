@@ -10,17 +10,116 @@ Q='-q'
 
 # Symlink files.
 symlink_header() { echo "Linking files into home directory"; }
+
+# 智能 symlink 測試函數
 symlink_test() {
-  [[ "$1" -ef "$2" ]] && echo "same file"
+  local source_file="$1"
+  local dest_file="$2"
+
+  # 如果目標文件不存在，直接返回（可以創建 symlink）
+  if [[ ! -e "$dest_file" ]]; then
+    return 0
+  fi
+
+  # 如果目標已經是正確的 symlink，跳過
+  if [[ -L "$dest_file" ]] && [[ "$(readlink "$dest_file")" == "$source_file" ]]; then
+    echo "already linked"
+    return 0
+  fi
+
+  # 如果目標是錯誤的 symlink，需要處理
+  if [[ -L "$dest_file" ]]; then
+    if [[ "$(readlink "$dest_file")" != "$source_file" ]]; then
+      echo "wrong symlink"
+      return 0
+    fi
+  fi
+
+  # 如果目標是普通文件或目錄，檢查內容差異
+  if [[ -f "$dest_file" ]] || [[ -d "$dest_file" ]]; then
+    if [[ -f "$source_file" ]] && [[ -f "$dest_file" ]]; then
+      # 比較文件內容
+      if ! cmp -s "$source_file" "$dest_file" 2>/dev/null; then
+        echo "different content"
+        return 0
+      fi
+    else
+      # 類型不同，需要備份
+      echo "different type"
+      return 0
+    fi
+  fi
+
+  # 如果完全相同，跳過
+  if [[ "$source_file" -ef "$dest_file" ]]; then
+    echo "same file"
+    return 0
+  fi
+
+  # 默認情況，需要處理
+  return 0
 }
+
+# 智能備份和 symlink 創建
 symlink_do() {
-  echo "Linking ~/$1 -> $2"
-  ln -sfn "$2" "$HOME/$1"
+  local base="$1"
+  local source_file="$2"
+  local dest_file="$HOME/$base"
+  local backup_dir="$DOTFILES/backups"
+
+  # 創建備份目錄
+  [[ -e "$backup_dir" ]] || mkdir -p "$backup_dir"
+
+  # 如果目標文件存在且需要備份
+  if [[ -e "$dest_file" ]]; then
+    local backup_path="$backup_dir/${base}.$(date +%Y%m%d_%H%M%S)"
+    local timestamp=$(date +%Y%m%d_%H%M%S)
+
+    # 智能備份：如果是 symlink，備份其目標內容；如果是普通文件，直接備份
+    if [[ -L "$dest_file" ]]; then
+      local link_target=$(readlink "$dest_file")
+      echo "Backing up symlink ~/$base (target: $link_target) to $backup_path"
+      
+      # 創建備份目錄結構
+      mkdir -p "$(dirname "$backup_path")"
+      
+      # 如果 symlink 目標存在，複製內容；否則只保存 symlink 信息
+      if [[ -e "$link_target" ]]; then
+        if [[ -d "$link_target" ]]; then
+          cp -r "$link_target" "$backup_path"
+        else
+          cp "$link_target" "$backup_path"
+        fi
+      else
+        # 如果目標不存在，創建一個記錄文件
+        echo "Symlink target: $link_target" > "$backup_path.info"
+        echo "Original symlink: $dest_file" >> "$backup_path.info"
+        echo "Backup time: $(date)" >> "$backup_path.info"
+      fi
+    else
+      echo "Backing up ~/$base to $backup_path"
+      if [[ -d "$dest_file" ]]; then
+        cp -r "$dest_file" "$backup_path"
+      else
+        cp "$dest_file" "$backup_path"
+      fi
+    fi
+
+    # 設置備份標誌
+    backup=1
+  fi
+
+  # 創建 symlink
+  echo "Linking ~/$base -> $source_file"
+  ln -sfn "$source_file" "$dest_file"
 }
+
 do_stuff() {
   local base dest skip
   local files=($DOTFILES/$1/*)
   local backup_dir="$DOTFILES/backups"
+  local backup=0
+
   [[ $(declare -f "$1_files") ]] && files=($($1_files "${files[@]}"))
   # No files? abort.
   if (( ${#files[@]} == 0 )); then return; fi
@@ -39,24 +138,24 @@ do_stuff() {
     if [[ $(declare -f "$1_test") ]]; then
       # If _test function returns a string, skip file and print that message.
       skip="$("$1_test" "$file" "$dest")"
-      if [[ "$skip" ]]; then
-        echo "Skipping ~/$base, $skip."
+      if [[ "$skip" == "already linked" ]]; then
+        echo "Skipping ~/$base, already correctly linked."
         continue
-      fi
-      # Destination file already exists in ~/. Back it up!
-      if [[ -e "$dest" ]]; then
-        echo "Backing up ~/$base."
-        # Set backup flag, so a nice message can be shown at the end.
-        backup=1
-        # Create backup dir if it doesn't already exist.
-        [[ -e "$backup_dir" ]] || mkdir -p "$backup_dir"
-        # Backup file / link / whatever.
-        mv "$dest" "$backup_dir"
+      elif [[ "$skip" == "same file" ]]; then
+        echo "Skipping ~/$base, same file."
+        continue
       fi
     fi
     # Do stuff.
     "$1_do" "$base" "$file"
   done
+
+  # 顯示備份信息
+  if [[ $backup -eq 1 ]]; then
+    echo ""
+    echo "📁 備份文件已保存到: $backup_dir"
+    echo "💡 如果需要恢復，可以從備份目錄手動恢復文件"
+  fi
 }
 
 # Tweak file globbing
