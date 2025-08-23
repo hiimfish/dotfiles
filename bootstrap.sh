@@ -20,6 +20,7 @@ symlink_do() {
 do_stuff() {
   local base dest skip
   local files=($DOTFILES/$1/*)
+  local backup_dir="$DOTFILES/backups"
   [[ $(declare -f "$1_files") ]] && files=($($1_files "${files[@]}"))
   # No files? abort.
   if (( ${#files[@]} == 0 )); then return; fi
@@ -108,18 +109,18 @@ if [ ! -d "$ZSH" ]; then
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)"
 fi
 
-# 檢查 macOS 更新
-echo "檢查 macOS 更新..."
-if softwareupdate -l 2>&1 | grep -q "No new software available."; then
-  echo "macOS 已是最新版本。"
-else
-  read -p "有可用的 macOS 更新，是否重新啟動以安裝？(Y/N): " answer
-  if [[ "$answer" =~ ^[Yy]$ ]]; then
-    sudo softwareupdate --install --all --restart
-  else
-    softwareupdate --download
-  fi
-fi
+# # 檢查 macOS 更新
+# echo "檢查 macOS 更新..."
+# if softwareupdate -l 2>&1 | grep -q "No new software available."; then
+#   echo "macOS 已是最新版本。"
+# else
+#   read -p "有可用的 macOS 更新，是否重新啟動以安裝？(Y/N): " answer
+#   if [[ "$answer" =~ ^[Yy]$ ]]; then
+#     sudo softwareupdate --install --all --restart
+#   else
+#     softwareupdate --download
+#   fi
+# fi
 
 # Clone dotfiles
 if git ls-remote "https://github.com/$GITHUB_USER/dotfiles" &>/dev/null; then
