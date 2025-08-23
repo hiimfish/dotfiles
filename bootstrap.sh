@@ -79,10 +79,10 @@ symlink_do() {
     if [[ -L "$dest_file" ]]; then
       local link_target=$(readlink "$dest_file")
       echo "Backing up symlink ~/$base (target: $link_target) to $backup_path"
-      
+
       # 創建備份目錄結構
       mkdir -p "$(dirname "$backup_path")"
-      
+
       # 如果 symlink 目標存在，複製內容；否則只保存 symlink 信息
       if [[ -e "$link_target" ]]; then
         if [[ -d "$link_target" ]]; then
@@ -247,7 +247,7 @@ if [ -f "$DOTFILES/setup/macos.sh" ]; then
 fi
 
 # 建立必要的目錄
-mkdir -pv "$HOME/OSS" "$HOME/Forceit" "$HOME/YT"
+mkdir -pv "$HOME/OSS" "$HOME/Forceit" "$HOME/YT" "$HOME/POYUN"
 # ln -sf "$(pwd -P)" "$HOME/OSS/dotfiles"
 
 # 安裝前端環境
