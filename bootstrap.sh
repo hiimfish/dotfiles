@@ -2,8 +2,8 @@
 
 set -e
 
-GIT_NAME='js-esusux'
-GIT_EMAIL='js-esusux@bob.com'
+GIT_NAME='hiimfish'
+GIT_EMAIL='chao.yen.po@gmail.com'
 GITHUB_USER='hiimfish'
 DOTFILES=$HOME/.dotfiles
 Q='-q'
