@@ -39,6 +39,7 @@ brew "asdf" # Version manager
 brew "tesseract" # OCR engine
 brew "mackup" # Keep your application settings in sync
 brew "cookiecutter" # Create projects from project templates
+brew "mise" # dev tools, env vars, task runner
 
 # Python
 brew "python"
