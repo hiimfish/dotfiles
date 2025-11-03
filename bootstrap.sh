@@ -247,7 +247,10 @@ if [ -f "$DOTFILES/setup/macos.sh" ]; then
 fi
 
 # 建立必要的目錄
-mkdir -pv "$HOME/OSS" "$HOME/DZ" "$HOME/YT" "$HOME/POYUN"
+mkdir -pv "$HOME/OSS"
+mkdir -pv "$HOME/FC"
+mkdir -pv "$HOME/YT"
+mkdir -pv "$HOME/POYUN"
 # ln -sf "$(pwd -P)" "$HOME/OSS/dotfiles"
 
 # 安裝前端環境
