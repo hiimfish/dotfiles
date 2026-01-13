@@ -60,7 +60,7 @@ cask "drawio" # 图形工具
 cask "visual-studio-code"
 cask "docker"
 cask "warp"
-cask "multipass" # Ubuntu VM manager
+# cask "multipass" # Ubuntu VM manager
 cask "dbngin"
 cask "herd"
 cask "rapidapi"
