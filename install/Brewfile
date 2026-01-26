@@ -52,7 +52,7 @@ brew "volta" # 取代 nvm
 
 # DevOps
 brew "fluent-bit"
-brew "minikube"
+# brew "minikube"
 
 # Development Applications
 cask "charles" # HTTP 请求调试工具
